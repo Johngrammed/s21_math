@@ -1,13 +1,12 @@
 #ifndef S21_MATH_H
 #define S21_MATH_H
 
-
 #include <math.h>
-#define S21_NAN 0.0/0.0
-#define S21_INF 1.0/+0.0
-#define S21_MINUS_INF 1.0/-0.0
+#define S21_NAN 0.0 / 0.0
+#define S21_INF 1.0 / +0.0
+#define S21_MINUS_INF 1.0 / -0.0
 #define S21_PI 3.14159265358979323846L
-#define S21_E  2.71828182845904523536L
+#define S21_E 2.71828182845904523536L
 
 int s21_abs(int x);
 long double s21_fabs(double x);
