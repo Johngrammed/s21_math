@@ -1,3 +1,4 @@
+#include <float.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -23,7 +24,7 @@ int main() {
   printf("floor = \t%lf\n\n\n", floor(x));
 
   */
-  double sinx = -0;
+  double sinx =  1e+9;
   double expi = -532.25;
   /*for (double i = 0; i <=360; i += 0.1){
       printf("sin = %0.10lf, s21_sin = %0.10Lf, eq? = %d\n", sin(i), s21_sin(i),
