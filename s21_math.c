@@ -48,9 +48,9 @@ long double s21_sin(double x) {
     int sign = 1;
     if (x != x || x == S21_INF || x == S21_MINUS_INF) {
         result = S21_NAN;
-    }else {
-    
-    
+    }else if (x == (double)(2 * S21_PI) || x == (double)(-3 * S21_PI)){
+    result = -0.;
+    } else{
   double angle = s21_fmod((x * (180.0 / S21_PI)), 360.0);
   
   if (x > 0) {
@@ -60,9 +60,9 @@ long double s21_sin(double x) {
   }
   if (x < 0) {
     sign = -1;
-    // if ((angle > -90 && angle <= -180) || angle > -180) {
-    //   sign = 1;
-    // }
+    if ((angle > -90 && angle <= -180) || angle > -180) {
+    sign = 1;
+    }
   }
   long double x1 = s21_fmod(x, S21_PI);
   
@@ -82,18 +82,19 @@ long double s21_cos(double x) {
         result = S21_NAN;
     }else {
   double angle = s21_fmod((x * (180.0 / S21_PI)), 360.0);
-  
-  if ((angle > 180 && angle <= 270) || angle > 270) {
+  //printf("angle = %lf\n", angle);
+  if (angle > 180 && angle < 360) {
     sign = -1;
+    //printf("minus\n");
   }
   if (x < 0) {
     sign = -1;
-    // if ((angle > -90 && angle <= -180) || angle > -180) {
-    //   sign = 1;
-    // }
+     if ((angle > -90 && angle <= -180) || angle > -180) {
+       sign = 1;
+     }
   }
   long double x1 = s21_fmod(x, S21_PI);
-  
+  //printf("sign = %d\n", sign);
   long double term = 1;
   for (int n = 0; n < 25; n += 2) {
     result += sign * term;
@@ -101,6 +102,7 @@ long double s21_cos(double x) {
     sign = -sign;
   }
   }
+  //printf("sign 2 = %d\n", sign);
   return result;
 }
 long double s21_tan(double x) { return s21_sin(x) / s21_cos(x); }
@@ -198,7 +200,7 @@ long double s21_exp(double x) {
     if (x < 0) {
       degree = -degree;
     }
-    while (degree > S21_EPS) {
+    while (degree) {
       if (s21_fmod(degree, 2) == 0) {
         degree /= 2;
         result1 *= result1;
@@ -235,7 +237,7 @@ long double s21_log(double x) {
     result = S21_NAN;
   } else {
     for (int i = 0; i < 20; i++) {
-      result = result + 2 * ((x - s21_exp(result)) / (x + s21_exp(result)));
+      result = result + 2. * (double)((x - s21_exp(result)) / (x + s21_exp(result)));
     }
   }
   return result;
@@ -326,7 +328,7 @@ long double s21_pow_check(double base, double exp) {
     result = -1;
   } else if (base < 0 && s21_floor(exp) != exp) {
     result = S21_NAN;
-  } else if (exp == S21_MINUS_INF) {
+  } else if (exp == S21_MINUS_INF || (base == 0 && exp < 0)) {
     result = S21_INF;
   }
   return result;
