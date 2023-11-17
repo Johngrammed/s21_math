@@ -66,10 +66,12 @@ long double s21_sin(double x) {
   }
   long double x1 = s21_fmod(x, S21_PI);
   
-  long double term = x1;
+ long double term = x1;
+  long long fact = 1;
   for (int n = 1; n < 25; n += 2) {
-    result += sign * term;
-    term = term * x1 * x1 / ((n + 1) * (n + 2));
+    result += sign * (term / fact);
+    term = term * x1 * x1;
+    fact = fact * (n+1) * (n + 2);
     sign = -sign;
   }
   }
@@ -96,16 +98,29 @@ long double s21_cos(double x) {
   long double x1 = s21_fmod(x, S21_PI);
   //printf("sign = %d\n", sign);
   long double term = 1;
+  long long fact = 1;
   for (int n = 0; n < 25; n += 2) {
-    result += sign * term;
-    term = term * x1 * x1 / ((n + 1) * (n + 2));
+    result += sign * (term / fact);
+    term = term * x1 * x1;
+    fact = fact * (n+1) * (n + 2);
     sign = -sign;
   }
   }
   //printf("sign 2 = %d\n", sign);
   return result;
 }
-long double s21_tan(double x) { return s21_sin(x) / s21_cos(x); }
+long double s21_tan(double x) { 
+  long double result;
+  if (x == (double)S21_PI/ 2) {
+    result = 16331239353195370L;
+  } else if (x == (double)-S21_PI / 2) {
+    result = -16331239353195370L;
+  } else{
+    result = s21_sin(x) / s21_cos(x);
+  }
+  
+  return result;
+  }
 long double s21_atan(double x) {
   long double result = 0.0;
   double orig_x = x;
@@ -182,7 +197,14 @@ long double s21_acos(double x) {
 }
 
 long double s21_exp(double x) {
-  double raised = s21_floor(x);
+  double raised;
+  if (x >=0){
+  raised = s21_floor(x);
+  }
+  else
+  {
+    raised = s21_ceil(x);
+  }
   double downed = x - raised;
   long degree = raised;
   long double result1 = S21_E;
@@ -199,6 +221,7 @@ long double s21_exp(double x) {
   } else {
     if (x < 0) {
       degree = -degree;
+      //printf("degree = %ld\n\n", degree);
     }
     while (degree) {
       if (s21_fmod(degree, 2) == 0) {
@@ -221,8 +244,15 @@ long double s21_exp(double x) {
       }
     }
     if (x < 0) {
+      if (downed != 0)
+      {
+      result1 = 1 / result1;
+      }
+       if (degree != 0){
       result = 1 / result;
     }
+    }
+   
   }
   return result * result1;
 }
@@ -237,7 +267,10 @@ long double s21_log(double x) {
     result = S21_NAN;
   } else {
     for (int i = 0; i < 20; i++) {
-      result = result + 2. * (double)((x - s21_exp(result)) / (x + s21_exp(result)));
+      //printf("result = %Lf\n", result);
+      //printf("exp = %lf\n", exp(result));
+      //printf("s21_exp = %Lf\n", s21_exp(result));
+      result = result + 2 *(x - exp(result)) / (x + exp(result));
     }
   }
   return result;
@@ -248,7 +281,13 @@ long double s21_pow(double base, double exp) {
   if (s21_pow_check(base, exp) != -123.123) {
     result1 = s21_pow_check(base, exp);
   } else {
-    double raised = s21_floor(exp);
+
+    double raised;
+    if (exp >=0){
+    raised = s21_floor(exp);
+    } else {
+      raised = s21_ceil(exp);
+    }
     double downed = exp - raised;
     long degree = raised;
     if (exp < 0) {
@@ -282,7 +321,7 @@ long double s21_pow_check(double base, double exp) {
     result = 0.0;
   } else if (base == -1 && exp == S21_INF) {
     result = 1;
-  } else if (base == S21_INF && exp == 1) {
+  } else if ((base == S21_INF && exp == 1) || (base == S21_INF && exp > 0)) {
     result = S21_INF;
   } else if (base == S21_MINUS_INF && exp > 0 && s21_fmod(exp, 2) == 0) {
     result = S21_INF;

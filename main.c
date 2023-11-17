@@ -24,8 +24,8 @@ int main() {
   printf("floor = \t%lf\n\n\n", floor(x));
 
   */
-  double sinx = 0.4;
-  double expi = 0.2;
+  double sinx = 3 * M_PI / 2;
+  double expi = -0.24;
   /*for (double i = 0; i <=360; i += 0.1){
       printf("sin = %0.10lf, s21_sin = %0.10Lf, eq? = %d\n", sin(i), s21_sin(i),
   sin(i) == s21_sin(i));
@@ -53,13 +53,13 @@ int main() {
   printf("org_acos = %0.6lf\n", acos(sinx));
 
   printf("s21_exp = %0.6Lf\n", s21_exp(sinx));
-  printf("org_exp = %0.6lf\n", exp(sinx));
+  printf("org_exp = %0.6f\n", exp(sinx));
 
   printf("s21_log = %0.6Lf\n", s21_log(sinx));
   printf("org_log = %0.6lf\n", log(sinx));
 
-  //printf("s21_pow = %0.6Lf\n", s21_pow(sinx, expi));
   printf("org_pow = %0.6lf\n", pow(sinx, expi));
+  printf("s21_pow = %0.6Lf\n", s21_pow(sinx, expi));
 
   return 0;
 }

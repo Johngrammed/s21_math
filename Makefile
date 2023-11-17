@@ -1,4 +1,4 @@
-all: s21_math s21_math.a
+all: clean s21_math s21_math.a
 	
 s21_math:	main.o s21_math.a
 	gcc -Wall -Wextra -Werror -std=c11 main.o s21_math.a -o main -lm
