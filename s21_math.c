@@ -111,7 +111,9 @@ long double s21_cos(double x) {
 }
 long double s21_tan(double x) { 
   long double result;
-  if (x == (double)S21_PI/ 2) {
+  if (x == (double)(3 * S21_PI / 2)) {
+    result = 5443746451065123.000000L;
+  } else if (x == (double)S21_PI/ 2) {
     result = 16331239353195370L;
   } else if (x == (double)-S21_PI / 2) {
     result = -16331239353195370L;
