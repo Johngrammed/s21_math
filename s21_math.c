@@ -162,7 +162,7 @@ long double s21_sqrt(double x) {
     result = S21_INF;
   } else {
     long double term = 1;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 200; i++) {
       result = (result + term) * 0.5;
       term = x / result;
     }

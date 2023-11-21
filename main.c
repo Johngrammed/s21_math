@@ -24,7 +24,7 @@ int main() {
   printf("floor = \t%lf\n\n\n", floor(x));
 
   */
-  double sinx = 3 * M_PI / 2;
+  double sinx = 5125212521521;
   double expi = -0.24;
   /*for (double i = 0; i <=360; i += 0.1){
       printf("sin = %0.10lf, s21_sin = %0.10Lf, eq? = %d\n", sin(i), s21_sin(i),
