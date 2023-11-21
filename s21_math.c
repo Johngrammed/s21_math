@@ -85,7 +85,7 @@ long double s21_cos(double x) {
     }else {
   double angle = s21_fmod((x * (180.0 / S21_PI)), 360.0);
   //printf("angle = %lf\n", angle);
-  if (angle > 180 && angle < 360) {
+  if (angle >= 180 && angle < 360) {
     sign = -1;
     //printf("minus\n");
   }
