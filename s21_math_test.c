@@ -23,7 +23,7 @@ void run_testcase(Suite *testcase) {
 
 void run_tests(void) {
     Suite *list_cases[] = {
-        suite_s21_cos(), NULL};
+        suite_s21_cos(), suite_s21_sin() , NULL};
 
         for (Suite **current_testcase = list_cases; *current_testcase != NULL; current_testcase++) {
             run_testcase(*current_testcase);

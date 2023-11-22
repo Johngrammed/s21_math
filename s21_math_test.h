@@ -7,6 +7,7 @@
 #include "s21_math.h"
 
 Suite *suite_s21_cos(void);
+Suite *suite_s21_sin(void);
 
 void run_tests(void);
 void run_testcase(Suite *testcase);

@@ -1,17 +1,20 @@
+CFLAGS=-Wall -Wextra -Werror
+TESTS=s21_math_test.h s21_math_test.c s21_cos_test.c s21_sin_test.c
+
 all: clean s21_math s21_math.a
 	
 s21_math:	main.o s21_math.a
-	gcc -Wall -Wextra -Werror main.o s21_math.a -o main -lm
+	gcc $(CFLAGS) main.o s21_math.a -o main -lm
 
 main.o: main.c
-	gcc -O -c -Wall -Wextra -Werror main.c
+	gcc -O -c $(CFLAGS) main.c
 
 s21_math.a: 
-	gcc -Wall -Wextra -Werror s21_math.c -O -c
+	gcc $(CFLAGS) s21_math.c -O -c
 	ar rcs s21_math.a s21_math.o
 
 test: s21_math.a s21_math
-	gcc -fprofile-arcs -ftest-coverage -Wall -Wextra -Werror s21_math_test.h s21_math_test.c s21_cos_test.c  s21_math.a -lcheck -lm -lrt -lpthread -o test 
+	gcc -fprofile-arcs -ftest-coverage $(CFLAGS) $(TESTS)  s21_math.a -lcheck -lm -lrt -lpthread -o test 
 	chmod +x test
 	./test
 
