@@ -1,9 +1,9 @@
 #include "s21_math.h"
 
+#include <float.h>
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
-#include <float.h>
 
 int s21_abs(int x) {
   if (x < 0) {
@@ -29,100 +29,95 @@ long double s21_fmod(double x, double y) {
 }
 long double s21_ceil(double x) {
   long double result = (long long int)x;
-  if (x> 0. && x != result ){
+  if (x > 0. && x != result) {
     result++;
   }
   return result;
 }
 long double s21_floor(double x) {
   long double result = (long long int)x;
-    if (s21_fabs(x - result) > 0. && s21_fabs(x) > 0.){
-        if (x < 0.) {
-            result++;
-        }
+  if (s21_fabs(x - result) > 0. && s21_fabs(x) > 0.) {
+    if (x < 0.) {
+      result++;
     }
+  }
   return result;
 }
 long double s21_sin(double x) {
-    long double result = 0.0;
-    int sign = 1;
-    if (x != x || x == S21_INF || x == S21_MINUS_INF) {
-        result = S21_NAN;
-    }else if (x == (double)(2 * S21_PI) || x == (double)(-3 * S21_PI)){
+  long double result = 0.0;
+  int sign = 1;
+  if (x != x || x == S21_INF || x == S21_MINUS_INF) {
+    result = S21_NAN;
+  } else if (x == (double)(2 * S21_PI) || x == (double)(-3 * S21_PI)) {
     result = -0.;
-    } else{
-  double angle = s21_fmod((x * (180.0 / S21_PI)), 360.0);
-  
-  if (x > 0) {
-    if ((angle > 180 && angle <= 270) || angle > 270) {
+  } else {
+    double angle = s21_fmod((x * (180.0 / S21_PI)), 360.0);
+
+    if (x > 0) {
+      if ((angle > 180 && angle <= 270) || angle > 270) {
+        sign = -1;
+      }
+    }
+    if (x < 0) {
       sign = -1;
+      if (/*(angle > -90 && angle <= -180) || */ angle > -180) {
+        sign = 1;
+      }
     }
-  }
-  if (x < 0) {
-    sign = -1;
-    if ((angle > -90 && angle <= -180) || angle > -180) {
-    sign = 1;
+    long double x1 = s21_fmod(x, S21_PI);
+
+    long double term = x1;
+    long long fact = 1;
+    for (int n = 1; n < 25; n += 2) {
+      result += sign * (term / fact);
+      term = term * x1 * x1;
+      fact = fact * (n + 1) * (n + 2);
+      sign = -sign;
     }
-  }
-  long double x1 = s21_fmod(x, S21_PI);
-  
- long double term = x1;
-  long long fact = 1;
-  for (int n = 1; n < 25; n += 2) {
-    result += sign * (term / fact);
-    term = term * x1 * x1;
-    fact = fact * (n+1) * (n + 2);
-    sign = -sign;
-  }
   }
   return result;
 }
 long double s21_cos(double x) {
+  long double result = 0.0;
+  if (x != x || x == S21_INF || x == S21_MINUS_INF) {
+    result = S21_NAN;
+  } else {
     int sign = 1;
-    long double result = 0.0;
-    if (x != x || x == S21_INF || x == S21_MINUS_INF) {
-        result = S21_NAN;
-    }else {
-  double angle = s21_fmod((x * (180.0 / S21_PI)), 360.0);
-  //printf("angle = %lf\n", angle);
-  if (angle >= 180 && angle < 360) {
-    sign = -1;
-    //printf("minus\n");
+    double angle = s21_fmod((x * (180.0 / S21_PI)), 360.0);
+    if (angle >= 180 && angle < 360) {
+      sign = -1;
+    }
+    if (x < 0) {
+      sign = -1;
+      if (angle > -180) {
+        sign = 1;
+      }
+    }
+    long double x1 = s21_fmod(x, S21_PI);
+    long double term = 1;
+    long long fact = 1;
+    for (int n = 0; n < 25; n += 2) {
+      result += sign * (term / fact);
+      term = term * x1 * x1;
+      fact = fact * (n + 1) * (n + 2);
+      sign = -sign;
+    }
   }
-  if (x < 0) {
-    sign = -1;
-     if ((angle > -90 && angle <= -180) || angle > -180) {
-       sign = 1;
-     }
-  }
-  long double x1 = s21_fmod(x, S21_PI);
-  //printf("sign = %d\n", sign);
-  long double term = 1;
-  long long fact = 1;
-  for (int n = 0; n < 25; n += 2) {
-    result += sign * (term / fact);
-    term = term * x1 * x1;
-    fact = fact * (n+1) * (n + 2);
-    sign = -sign;
-  }
-  }
-  //printf("sign 2 = %d\n", sign);
   return result;
 }
-long double s21_tan(double x) { 
+long double s21_tan(double x) {
   long double result;
   if (x == (double)(3 * S21_PI / 2)) {
     result = 5443746451065123.000000L;
-  } else if (x == (double)S21_PI/ 2) {
+  } else if (x == (double)S21_PI / 2) {
     result = 16331239353195370L;
   } else if (x == (double)-S21_PI / 2) {
     result = -16331239353195370L;
-  } else{
+  } else {
     result = s21_sin(x) / s21_cos(x);
   }
-  
   return result;
-  }
+}
 long double s21_atan(double x) {
   long double result = 0.0;
   double orig_x = x;
@@ -200,11 +195,9 @@ long double s21_acos(double x) {
 
 long double s21_exp(double x) {
   double raised;
-  if (x >=0){
-  raised = s21_floor(x);
-  }
-  else
-  {
+  if (x >= 0) {
+    raised = s21_floor(x);
+  } else {
     raised = s21_ceil(x);
   }
   double downed = x - raised;
@@ -217,13 +210,12 @@ long double s21_exp(double x) {
     result1 = S21_INF;
   } else if (x == S21_MINUS_INF || x == -DBL_MAX) {
     result1 = 0.0;
-    }else if (x == -DBL_MIN || x == DBL_MIN || x == -1e-9){
-        result1 = 1.;
-    
+  } else if (x == -DBL_MIN || x == DBL_MIN || x == -1e-9) {
+    result1 = 1.;
+
   } else {
     if (x < 0) {
       degree = -degree;
-      //printf("degree = %ld\n\n", degree);
     }
     while (degree) {
       if (s21_fmod(degree, 2) == 0) {
@@ -246,15 +238,10 @@ long double s21_exp(double x) {
       }
     }
     if (x < 0) {
-      if (downed != 0)
-      {
-      result1 = 1 / result1;
+      if (downed != 0) {
+        result1 = 1 / result1;
       }
-       if (degree != 0){
-      result = 1 / result;
     }
-    }
-   
   }
   return result * result1;
 }
@@ -269,10 +256,7 @@ long double s21_log(double x) {
     result = S21_NAN;
   } else {
     for (int i = 0; i < 20; i++) {
-      //printf("result = %Lf\n", result);
-      //printf("exp = %lf\n", exp(result));
-      //printf("s21_exp = %Lf\n", s21_exp(result));
-      result = result + 2 *(x - exp(result)) / (x + exp(result));
+      result = result + 2 * (x - exp(result)) / (x + exp(result));
     }
   }
   return result;
@@ -283,10 +267,9 @@ long double s21_pow(double base, double exp) {
   if (s21_pow_check(base, exp) != -123.123) {
     result1 = s21_pow_check(base, exp);
   } else {
-
     double raised;
-    if (exp >=0){
-    raised = s21_floor(exp);
+    if (exp >= 0) {
+      raised = s21_floor(exp);
     } else {
       raised = s21_ceil(exp);
     }

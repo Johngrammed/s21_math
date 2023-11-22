@@ -1,5 +1,6 @@
-#include "s21_math_test.h"
 #include <stdio.h>
+
+#include "s21_math_test.h"
 
 START_TEST(sin_1) {
   double num = 0.55;

@@ -1,8 +1,8 @@
+#include <check.h>
 #include <float.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <check.h>
 
 #include "s21_math.h"
 
@@ -32,6 +32,8 @@ int main() {
   sin(i) == s21_sin(i));
   }
   */
+  printf("s21_sin = %d\n", s21_abs(-521));
+
   printf("s21_sin = %0.6Lf\n", s21_sin(sinx));
   printf("org_sin = %0.6lf\n", sin(sinx));
 
@@ -48,10 +50,10 @@ int main() {
   printf("org_sqrt = %0.6lf\n", sqrt(sinx));
 
   printf("s21_asin = %0.6Lf\n", s21_asin(sinx));
-  printf("org_asin = %0.6lf\n", asin(sinx));
+  // printf("org_asin = %0.6lf\n", asin(sinx));
 
   printf("s21_acos = %0.6Lf\n", s21_acos(sinx));
-  printf("org_acos = %0.6lf\n", acos(sinx));
+  // printf("org_acos = %0.6lf\n", acos(sinx));
 
   printf("s21_exp = %0.6Lf\n", s21_exp(sinx));
   printf("org_exp = %0.6f\n", exp(sinx));
