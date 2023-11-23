@@ -17,7 +17,8 @@ long double s21_atan(double x);
 long double s21_ceil(double x);
 long double s21_cos(double x);
 long double s21_exp(double x);
-void s21_exp_calc(long degree, double x, double downed, long double *result, long double *result1);
+void s21_exp_calc(long degree, double x, double downed, long double *result,
+                  long double *result1);
 long double s21_fabs(double x);
 long double s21_floor(double x);
 long double s21_fmod(double x, double y);

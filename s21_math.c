@@ -12,7 +12,13 @@ int s21_abs(int x) {
   return x;
 }
 long double s21_fabs(double x) {
-  if (x < 0) {
+  if (x == S21_INF) {
+    x = S21_INF;
+  } else if (x == S21_MINUS_INF) {
+    x = S21_MINUS_INF;
+  } else if (x == S21_NAN) {
+    x = S21_NAN;
+  } else if (x < 0) {
     x *= -1;
   }
   return x;
@@ -31,7 +37,7 @@ long double s21_ceil(double x) {
   long double result = (long long int)x;
   if (x == -S21_INF) {
     result = -S21_INF;
-  }else if (x > 0. && x != result) {
+  } else if (x > 0. && x != result) {
     result++;
   }
   return result;
@@ -40,7 +46,7 @@ long double s21_floor(double x) {
   long double result = (long long int)x;
   if (x == -S21_INF) {
     result = -S21_INF;
-  }else if (s21_fabs(x - result) > 0. && s21_fabs(x) > 0.) {
+  } else if (s21_fabs(x - result) > 0. && s21_fabs(x) > 0.) {
     if (x < 0.) {
       result++;
     }
@@ -148,7 +154,7 @@ long double s21_atan(double x) {
       result = -S21_PI / 2.0 - result;
     }
   }
-  
+
   return result;
 }
 long double s21_sqrt(double x) {
@@ -197,35 +203,36 @@ long double s21_acos(double x) {
   }
   return result;
 }
-void s21_exp_calc(long degree, double x, double downed, long double *result, long double *result1) {
+void s21_exp_calc(long degree, double x, double downed, long double *result,
+                  long double *result1) {
   if (x < 0) {
-      degree = -degree;
+    degree = -degree;
+  }
+  while (degree) {
+    if (s21_fmod(degree, 2) == 0) {
+      degree /= 2;
+      *result1 *= *result1;
+    } else {
+      degree--;
+      *result *= *result1;
     }
-    while (degree) {
-      if (s21_fmod(degree, 2) == 0) {
-        degree /= 2;
-        *result1 *= *result1;
-      } else {
-        degree--;
-        *result *= *result1;
-      }
-    }
-    *result1 = 1.;
-    if (downed != 0) {
-      long double term = downed;
-      long fact = 1;
+  }
+  *result1 = 1.;
+  if (downed != 0) {
+    long double term = downed;
+    long fact = 1;
 
-      for (int i = 2; i < 25; i++) {
-        *result1 += term / fact;
-        term = term * downed;
-        fact *= i;
-      }
+    for (int i = 2; i < 25; i++) {
+      *result1 += term / fact;
+      term = term * downed;
+      fact *= i;
     }
-    if (x < 0) {
-      if (downed != 0) {
-        *result1 = 1 / *result1;
-      }
+  }
+  if (x < 0) {
+    if (downed != 0) {
+      *result1 = 1 / *result1;
     }
+  }
 }
 
 long double s21_exp(double x) {
@@ -249,7 +256,7 @@ long double s21_exp(double x) {
     result1 = 1.;
 
   } else {
-    s21_exp_calc( degree, x, downed, &result, &result1);
+    s21_exp_calc(degree, x, downed, &result, &result1);
   }
   return result * result1;
 }
