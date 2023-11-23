@@ -18,21 +18,23 @@ int main() {
   printf("s21_fmod = %Lf\n", s21_fmod(x, y));
   printf("s21_fmod = %lf\n", fmod(x, y));
 
-  printf("s21_ceil = \t%Lf\n", s21_ceil(x));
-  printf("ceil = \t%lf\n", ceil(x));
-
-  printf("s21_floor = \t%Lf\n", s21_floor(x));
-  printf("floor = \t%lf\n\n\n", floor(x));
+  
 
   */
-  double sinx = 3 * M_PI;
+  long double sinx = S21_INF;
   double expi = -0.24;
   /*for (double i = 0; i <=360; i += 0.1){
       printf("sin = %0.10lf, s21_sin = %0.10Lf, eq? = %d\n", sin(i), s21_sin(i),
   sin(i) == s21_sin(i));
   }
   */
-  printf("s21_sin = %d\n", s21_abs(-521));
+printf("s21_ceil = \t%Lf\n", s21_ceil(sinx));
+  printf("ceil = \t%lf\n", ceil(sinx));
+
+  printf("s21_floor = \t%Lf\n", s21_floor(sinx));
+  printf("floor = \t%lf\n\n\n", floor(sinx));
+
+  printf("s21_abs = %d\n", s21_abs(-521));
 
   printf("s21_sin = %0.6Lf\n", s21_sin(sinx));
   printf("org_sin = %0.6lf\n", sin(sinx));
@@ -40,11 +42,11 @@ int main() {
   printf("s21_cos = %0.6Lf\n", s21_cos(sinx));
   printf("org_cos = %0.6lf\n", cos(sinx));
 
-  printf("s21_tan = %0.6Lf\n", s21_tan(sinx));
-  printf("org_tan = %0.6lf\n", tan(sinx));
+  printf("s21_tan = %0.6Lf\n", s21_tan( sinx));
+  printf("org_tan = %0.6lf\n", tan( sinx));
 
-  printf("s21_atan = %0.6Lf\n", s21_atan(sinx));
-  printf("org_atan = %0.6lf\n", atan(sinx));
+  printf("s21_atan = %0.32Lf\n", s21_atan(sinx));
+  printf("org_atan = %0.32lf\n", atan(sinx));
 
   printf("s21_sqrt = %0.6Lf\n", s21_sqrt(sinx));
   printf("org_sqrt = %0.6lf\n", sqrt(sinx));

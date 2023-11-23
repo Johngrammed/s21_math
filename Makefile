@@ -1,5 +1,5 @@
 CFLAGS=-Wall -Wextra -Werror
-TESTS=s21_math_test.h s21_math_test.c s21_cos_test.c s21_sin_test.c
+TESTS=s21_math_test.h s21_math_test.c s21_cos_test.c s21_sin_test.c s21_tan_test.c s21_atan_test.c s21_asin_test.c s21_acos_test.c s21_ceil_test.c
 
 all: clean s21_math s21_math.a
 	
@@ -14,12 +14,12 @@ s21_math.a:
 	ar rcs s21_math.a s21_math.o
 
 test: s21_math.a s21_math
-	gcc -fprofile-arcs -ftest-coverage $(CFLAGS) $(TESTS)  s21_math.a -lcheck -lm -lrt -lpthread -o test 
+	gcc --coverage $(CFLAGS) $(TESTS)  s21_math.a -lcheck -lm -o test 
 	chmod +x test
 	./test
 
 gcov_report: clean test
-	gcov -b -c  test-s21_math_test.gcno
+	gcov test-s21_math_test.gcno
 	lcov --directory . --capture --output-file coverage.info
 	genhtml coverage.info --output-directory coverage
 
