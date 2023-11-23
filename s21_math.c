@@ -16,7 +16,7 @@ long double s21_fabs(double x) {
     x = S21_INF;
   } else if (x == S21_MINUS_INF) {
     x = S21_MINUS_INF;
-  } else if (x == S21_NAN) {
+  } else if (x != x) {
     x = S21_NAN;
   } else if (x < 0) {
     x *= -1;
@@ -35,7 +35,11 @@ long double s21_fmod(double x, double y) {
 }
 long double s21_ceil(double x) {
   long double result = (long long int)x;
-  if (x == -S21_INF) {
+  if (x != x) {
+    result = S21_NAN;
+  } else if (x == S21_INF) {
+    result = S21_INF;
+  } else if (x == -S21_INF) {
     result = -S21_INF;
   } else if (x > 0. && x != result) {
     result++;
@@ -44,11 +48,15 @@ long double s21_ceil(double x) {
 }
 long double s21_floor(double x) {
   long double result = (long long int)x;
-  if (x == -S21_INF) {
+  if (x != x) {
+    result = S21_NAN;
+  } else if (x == S21_INF) {
+    result = S21_INF;
+  } else if (x == -S21_INF) {
     result = -S21_INF;
   } else if (s21_fabs(x - result) > 0. && s21_fabs(x) > 0.) {
     if (x < 0.) {
-      result++;
+      result--;
     }
   }
   return result;
@@ -117,7 +125,7 @@ long double s21_cos(double x) {
 }
 long double s21_tan(double x) {
   long double result;
-  if (x == (3 * S21_PI / 2)) {
+  if (x == (double)(3 * S21_PI / 2)) {
     result = 5443746451065123.000000L;
   } else if (x == (double)(S21_PI / 2)) {
     result = 16331239353195370L;
