@@ -1,7 +1,7 @@
 #ifndef S21_MATH_H
 #define S21_MATH_H
 
-#include <math.h>
+#include <float.h>
 
 #define S21_NAN 0.0 / 0.0
 #define S21_INF 1.0 / +0.0

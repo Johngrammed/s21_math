@@ -1,9 +1,5 @@
 #include "s21_math.h"
 
-#include <float.h>
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
 
 int s21_abs(int x) {
   if (x < 0) {
@@ -277,7 +273,7 @@ long double s21_log(double x) {
     result = S21_NAN;
   } else {
     for (int i = 0; i < 250; i++) {
-      result = result + 2 * (x - exp(result)) / (x + exp(result));
+      result = result + 2 * (x - s21_exp(result)) / (x + s21_exp(result));
     }
   }
   return result;

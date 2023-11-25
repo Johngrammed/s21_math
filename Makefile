@@ -31,3 +31,5 @@ gcov_report: clean test
 
 clean:
 	rm -rf main *.a *.o *gcno *.gcda s21_math_test *.gcov ./coverage *.info test *.gch
+
+	
