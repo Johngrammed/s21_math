@@ -1,7 +1,7 @@
 CFLAGS=-Wall -Wextra -Werror -std=gnu11
 TESTS=s21_math_test.h s21_math_test.c
 POSIX=-D_POSIX_C_SOURCE=200809L
-COVER=--coverage
+COVER=-O0 --coverage
 
 all: clean s21_math 
 	

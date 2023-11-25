@@ -78,7 +78,7 @@ long double s21_sin(double x) {
     }
     if (x < 0) {
       sign = -1;
-      if (/*(angle > -90 && angle <= -180) || */ angle > -180) {
+      if (angle > -180) {
         sign = 1;
       }
     }
@@ -237,9 +237,7 @@ void s21_exp_calc(long degree, double x, double downed, long double *result,
     }
   }
   if (x < 0) {
-    if (downed != 0) {
-      *result1 = 1 / *result1;
-    }
+    *result = 1 / *result;
   }
 }
 
@@ -278,14 +276,14 @@ long double s21_log(double x) {
   } else if (x <= 0.0 || x != x) {
     result = S21_NAN;
   } else {
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 250; i++) {
       result = result + 2 * (x - exp(result)) / (x + exp(result));
     }
   }
   return result;
 }
 long double s21_pow(double base, double exp) {
-  long double result = 1;
+  long double result = 1.;
   long double result1 = base;
   if (s21_pow_check(base, exp) != -123.123) {
     result1 = s21_pow_check(base, exp);
@@ -345,30 +343,23 @@ long double s21_pow_check(double base, double exp) {
     result = 0;
   } else if ((base == 1 || base == -1) && exp == S21_MINUS_INF) {
     result = 1;
-  } else if ((base > 1 || base < -1) && exp == S21_MINUS_INF) {
+  } else if (((base > 1 || base < -1) && exp == S21_MINUS_INF) ||
+             (((base == S21_INF || base == S21_MINUS_INF) && exp < 0) ||
+              (base == 0. && exp == S21_INF))) {
     result = 0;
-  } else if (exp == 0) {
+  } else if (exp == 0 ||
+             (((base == S21_INF || base == S21_MINUS_INF) && exp > 0) ||
+              base == 1)) {
     result = 1.;
   } else if (base != base || exp != exp) {
     result = S21_NAN;
-  } else if (((base == S21_INF || base == S21_MINUS_INF) && exp > 0) ||
-             base == 1) {
-    result = 1.;
-  } else if (((base == S21_INF || base == S21_MINUS_INF) && exp < 0) ||
-             (base == 0. && exp == S21_INF)) {
-    result = 0.;
   } else if ((base == 0. && exp == S21_MINUS_INF) ||
              (base == 0 && exp == S21_INF) ||
-             (base == -0. && exp < 0 && s21_floor(exp) == exp) ||
-             ((base == S21_INF || base == S21_MINUS_INF) &&
-              (exp == S21_INF || exp == S21_MINUS_INF))) {
+             (base == -0. && exp < 0 && s21_floor(exp) == exp)) {
     result = S21_INF;
   } else if ((base == 0. && exp > 0) ||
-             (base == -0 && exp > 0 && s21_fmod(exp, 2) == 0. &&
-              s21_floor(exp) == exp)) {
+             (base == -0 && exp > 0 && s21_fmod(exp, 2) == 0.)) {
     result = 0;
-  } else if (base == -0. && exp > 0 && s21_fmod(exp, 2) != 0.) {
-    result = -0.;
   } else if (base == -1 && s21_fmod(exp, 2) == 0 && s21_floor(exp) == exp) {
     result = 1;
   } else if (base == -1 && s21_fmod(exp, 2) != 0 && s21_floor(exp) == exp) {
