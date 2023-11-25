@@ -19,7 +19,7 @@ s21_math_test.o: s21_math_test.c
 	gcc $(CFLAGS) $(POSIX) $(TESTS) s21_math_test.c -lm -lcheck -O -c $(COVER)
 
 test: clean s21_math.a s21_math_test.o
-	gcc --coverage $(CFLAGS) $(POSIX) s21_math_test.o  s21_math.a -lcheck -lm -o test 
+	gcc $(COVER) $(CFLAGS) $(POSIX) s21_math_test.o  s21_math.a -lcheck -lm -o test 
 	chmod +x test
 	./test
 
