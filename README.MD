@@ -1,9 +1,11 @@
+# s21_math
+
 Hello. This is my math.h static library which i called s21_math.h
 
-you can use it like you want.
+You can use it like you want.
 
-  #Overview of some "s21_math.h" functions
-  | No. | Function                                     | Description                                                  |
+# Overview of some "s21_math.h" functions
+| No. | Function                                     | Description                                                  |
 |-----|----------------------------------------------|--------------------------------------------------------------|
 | 1   | int s21_abs(int x)                           | computes absolute value of an integer value                  |
 | 2   | long double s21_acos(double x)               | computes arc cosine                                          |
@@ -21,6 +23,7 @@ you can use it like you want.
 | 14  | long double s21_sqrt(double x)               | computes square root                                         |
 | 15  | long double s21_tan(double x)                | computes tangent                                             |
 
+# Building
 
 for make the static library:
 ```sh
@@ -32,9 +35,11 @@ for test reporting:
 make gcov_report
 ```
 
-then -> in dir coverage -> index.html -> open in browser
+then -> in dir coverage -> index.html -> open in browser.
 
 for cleaning dir from compiling:
 ```sh
 make clean
 ```
+# Standarts
+Developed in C language of C11 standard using gcc compiler. Used the POSIX.1-2017 standard.
