@@ -1,16 +1,19 @@
 #include "s21_math.h"
 
+// Просто домножаем на -1 если число отрицательное
 int s21_abs(int x) {
   if (x < 0) {
     x *= -1;
   }
   return x;
 }
+
+//  Тут тоже самое, только еще проверяем на бесконечность и НЕ ЧИСЛО
 long double s21_fabs(double x) {
   if (x == S21_INF) {
     x = S21_INF;
   } else if (x == S21_MINUS_INF) {
-    x = S21_MINUS_INF;
+    x = S21_INF;
   } else if (x != x) {
     x = S21_NAN;
   } else if (x < 0) {
@@ -19,27 +22,37 @@ long double s21_fabs(double x) {
   return x;
 }
 long double s21_fmod(double x, double y) {
-  long double res;
-  if ((x < 0 && y > 0) || (y < 0 && x > 0)) {
-    res = x - y * s21_ceil(x / y);
-
+  long double res = 0;
+  if ((x != x) || (y != y) || x == S21_INF || x == -S21_INF || y == 0) {
+    res = S21_NAN;
+  } else if (y == S21_INF || y == -S21_INF) {
+    res = x;
+  } else if (x == 0.0 && y != 0.) {
+    res = 0.0;
   } else {
-    res = x - y * s21_floor(x / y);
+    if (x < 0 || y < 0) {
+      res = -s21_abs(x / y);
+    } else {
+      res = s21_abs(x / y);
+    }
+    res = x - res * y;
   }
   return res;
 }
 long double s21_ceil(double x) {
-  long double result = (long long int)x;
-  if (x != x) {
-    result = S21_NAN;
-  } else if (x == S21_INF) {
-    result = S21_INF;
-  } else if (x == -S21_INF) {
-    result = -S21_INF;
-  } else if (x > 0. && x != result) {
-    result++;
+  long double res = (long long int)x;
+  if (x == S21_INF || x == -S21_INF || x == 0 || x == -0.0 || (x != x) ||
+      x == DBL_MAX) {
+    res = x;
+  } else if (x == DBL_MIN) {
+    res = 1;
+  } else {
+    if (s21_fabs(x) > 0. && x != res)
+      if (x > 0.) {
+        res += 1;
+      }
   }
-  return result;
+  return res;
 }
 long double s21_floor(double x) {
   long double result = (long long int)x;
@@ -263,20 +276,37 @@ long double s21_exp(double x) {
 }
 
 long double s21_log(double x) {
-  long double result = 0.0;
-  if (x == S21_INF) {
-    result = S21_INF;
-  } else if (x == +0) {
-    result = S21_MINUS_INF;
-  } else if (x <= 0.0 || x != x) {
-    result = S21_NAN;
+  long double res = 0;
+  if (x < 0 || x == -S21_INF || (x != x)) {
+    res = S21_NAN;
+  } else if (x == 0) {
+    res = -S21_INF;
+  } else if (x == S21_INF) {
+    res = S21_INF;
+  } else if (x == 1) {
+    res = 0;
   } else {
-    for (int i = 0; i < 250; i++) {
-      result = result + 2 * (x - s21_exp(result)) / (x + s21_exp(result));
+    double N = 0.0, P = x, A = 0;
+    while (P >= S21_E) {
+      P /= S21_E;
+      N++;
     }
+    N += (P / S21_E);
+    P = x;
+    int j = 0;
+    do {
+      double L, R;
+      A = N;
+      L = (P / (s21_exp(N - 1.0)));
+      R = ((N - 1.0) * S21_E);
+      N = ((L + R) / S21_E);
+      j++;
+    } while (N != A && j < 10000);
+    res = N;
   }
-  return result;
+  return res;
 }
+
 long double s21_pow(double base, double exp) {
   long double result = 1.;
   long double result1 = base;

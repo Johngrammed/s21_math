@@ -1,7 +1,10 @@
 #include "s21_math_test.h"
 
 #include <check.h>
+#include <limits.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "s21_math.h"
 
@@ -28,6 +31,53 @@ START_TEST(test_cos) {
   ck_assert_ldouble_nan(s21_cos(NAN));
   ck_assert_ldouble_nan(s21_cos(INFINITY));
   ck_assert_ldouble_nan(s21_cos(-INFINITY));
+  {
+    double x = 0.4;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = -0.4;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = 0;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = 1;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = -1;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = 598987986;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = -5938409234;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = 0.123456789012345678901234567890;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = S21_PI;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = 1 + 1e-6;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  {
+    double x = -1 - 1e-6;
+    ck_assert_ldouble_eq_tol(cos(x), s21_cos(x), 1e-6);
+  }
+  ck_assert_ldouble_nan(s21_cos(S21_INF));
+  ck_assert_ldouble_nan(s21_cos(S21_NAN));
+  ck_assert_ldouble_nan(s21_cos(-S21_INF));
 }
 END_TEST
 
@@ -54,6 +104,38 @@ START_TEST(test_sin) {
   ck_assert_ldouble_nan(s21_sin(NAN));
   ck_assert_ldouble_nan(s21_sin(INFINITY));
   ck_assert_ldouble_nan(s21_sin(-INFINITY));
+  {
+    double x = 2.523;
+    ck_assert_ldouble_eq_tol(sin(x), s21_sin(x), 1e-6);
+  }
+  {
+    double x = -2.523;
+    ck_assert_ldouble_eq_tol(sin(x), s21_sin(x), 1e-6);
+  }
+  {
+    double x = 923456789;
+    ck_assert_ldouble_eq_tol(sin(x), s21_sin(x), 1e-6);
+  }
+  {
+    double x = -923456789;
+    ck_assert_ldouble_eq_tol(sin(x), s21_sin(x), 1e-6);
+  }
+  {
+    double x = 0;
+    ck_assert_ldouble_eq_tol(sin(x), s21_sin(x), 1e-6);
+  }
+  {
+    double x = S21_NAN;
+    ck_assert_ldouble_nan(s21_sin(x));
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_nan(s21_sin(x));
+  }
+  {
+    double x = 0.12345678901234567890;
+    ck_assert_ldouble_eq_tol(sin(x), s21_sin(x), 1e-6);
+  }
 }
 END_TEST
 
@@ -61,6 +143,17 @@ START_TEST(test_abs) {
   ck_assert_int_eq(s21_abs(0), 0);
   ck_assert_int_eq(s21_abs(1), 1);
   ck_assert_int_eq(s21_abs(-1), 1);
+  ck_assert_int_eq(s21_abs(5), abs(5));
+  ck_assert_int_eq(s21_abs(-2147483647), abs(-2147483647));
+  ck_assert_int_eq(s21_abs(-0xA13), abs(-0xA13));
+  ck_assert_int_eq(s21_abs(13), abs(13));
+  ck_assert_int_eq(s21_abs(-0), abs(-0));
+  ck_assert_int_eq(s21_abs(-05), abs(-05));
+  ck_assert_int_eq(s21_abs(-00002345670), abs(-00002345670));
+  ck_assert_int_eq(s21_abs(123456789), abs(123456789));
+  ck_assert_int_eq(s21_abs(100), abs(100));
+  ck_assert_int_eq(s21_abs(-100), abs(-100));
+  ck_assert_int_eq(s21_abs(0), abs(0));
 }
 END_TEST
 
@@ -81,6 +174,16 @@ START_TEST(test_fabs) {
   // ck_assert_ldouble_infinite(s21_fabs(S21_INF));
   // ck_assert_ldouble_infinite(s21_fabs(-S21_INF));
   ck_assert_ldouble_eq(S21_INF, fabs(-S21_INF));
+  ck_assert_ldouble_eq(s21_fabs(1.0), fabs(1.0));
+  ck_assert_ldouble_eq(s21_fabs(-1.000005), fabs(-1.000005));
+  ck_assert_ldouble_eq(s21_fabs(0.0), fabs(0.0));
+  ck_assert_ldouble_eq(s21_fabs(-0.0), fabs(-0.0));
+  ck_assert_ldouble_eq(s21_fabs(S21_INF), fabs(S21_INF));
+  ck_assert_ldouble_eq(s21_fabs(-S21_INF), fabs(-S21_INF));
+  ck_assert_ldouble_nan(s21_fabs(S21_NAN));
+  ck_assert_ldouble_eq(s21_fabs(1000.042), fabs(1000.042));
+  ck_assert_ldouble_eq(s21_fabs(-1000.042), fabs(-1000.042));
+  ck_assert_ldouble_eq(s21_fabs(987633.465), fabs(987633.465));
 }
 END_TEST
 
@@ -97,6 +200,89 @@ START_TEST(test_ceil) {
   // ck_assert_ldouble_infinite(s21_ceil(-S21_INF));
   ck_assert_ldouble_eq(S21_INF, s21_ceil(S21_INF));
   ck_assert_ldouble_eq(-S21_INF, s21_ceil(-S21_INF));
+  {
+    double x = 1.0;
+    ck_assert_ldouble_eq_tol(s21_ceil(x), ceil(x), 6);
+  }
+  {
+    double x = 0.0;
+    ck_assert_ldouble_eq_tol(s21_ceil(x), ceil(x), 6);
+  }
+  {
+    double x = -0.0;
+    ck_assert_ldouble_eq_tol(s21_ceil(x), ceil(x), 6);
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_eq(s21_ceil(x), ceil(x));
+  }
+  {
+    double x = -S21_INF;
+    ck_assert_ldouble_eq(s21_ceil(x), ceil(x));
+  }
+  {
+    double x = S21_NAN;
+    ck_assert_ldouble_nan(s21_ceil(x));
+  }
+  {
+    double x = 4.7;
+    ck_assert_ldouble_eq_tol(s21_ceil(x), ceil(x), 6);
+  }
+  {
+    double x = 4.7323234567890765;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = 4732323456789076.5;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = -4.7323234567890765;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = -4732323456789076.5;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    ck_assert_ldouble_infinite(s21_ceil(S21_INF));
+    ck_assert_ldouble_infinite(ceil(S21_INF));
+  }
+  {
+    ck_assert_ldouble_nan(s21_ceil(S21_NAN));
+    ck_assert_ldouble_nan(ceil(S21_NAN));
+  }
+  { ck_assert_ldouble_eq(s21_ceil(0), ceil(0)); }
+  {
+    double x = 8743517471375471154.34143134134134;
+    ck_assert_ldouble_eq(s21_ceil(x), ceil(x));
+  }
+  {
+    double x = -8743517471375471154.34143134134134;
+    ck_assert_ldouble_eq(s21_ceil(x), ceil(x));
+  }
+  { ck_assert_ldouble_eq(ceil(0), s21_ceil(0)); }
+  ck_assert_ldouble_eq(ceil(-1234), s21_ceil(-1234));
+  ck_assert_ldouble_eq(ceil(1234), s21_ceil(1234));
+  ck_assert_ldouble_eq(ceil(1), s21_ceil(1));
+  ck_assert_ldouble_eq(ceil(1.7), s21_ceil(1.7));
+  ck_assert_int_eq(ceil(-1.7), s21_ceil(-1.7));
+  ck_assert_int_eq(floor(-0.7), s21_floor(-0.7));
+  ck_assert_ldouble_eq(ceil(14.7), s21_ceil(14.7));
+  ck_assert_ldouble_eq(ceil(0.7), s21_ceil(0.7));
+  ck_assert_ldouble_eq(ceil(S21_INF), s21_ceil(S21_INF));
+  ck_assert_ldouble_eq(ceil(-S21_INF), s21_ceil(-S21_INF));
+  {
+    double num = DBL_MIN;
+    double orig = ceil(num);
+    double mmyy = s21_ceil(num);
+    ck_assert_ldouble_eq(orig, mmyy);
+  }
+  {
+    double orig = ceil(DBL_MAX);
+    double mmyy = s21_ceil(DBL_MAX);
+    ck_assert_ldouble_eq(orig, mmyy);
+  }
 }
 END_TEST
 
@@ -113,6 +299,63 @@ START_TEST(test_floor) {
   // ck_assert_ldouble_infinite(s21_floor(-S21_INF));
   ck_assert_ldouble_eq(S21_INF, s21_floor(S21_INF));
   ck_assert_ldouble_eq(-S21_INF, s21_floor(-S21_INF));
+  {
+    double x = 1.0;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = 0.0;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = -0.0;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_eq(s21_floor(x), floor(x));
+  }
+  {
+    double x = -S21_INF;
+    ck_assert_ldouble_eq(s21_floor(x), floor(x));
+  }
+  {
+    double x = NAN;
+    ck_assert_ldouble_nan(s21_floor(x));
+  }
+  {
+    double x = -4.7;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = 4.7323234567890765;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = 4732323456789076.5;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = -4.7323234567890765;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  {
+    double x = -4732323456789076.5;
+    ck_assert_ldouble_eq_tol(s21_floor(x), floor(x), 6);
+  }
+  ck_assert_ldouble_eq(floor(0), s21_floor(0));
+  ck_assert_ldouble_eq(floor(-1234), s21_floor(-1234));
+  ck_assert_ldouble_eq(floor(1234), s21_floor(1234));
+  ck_assert_ldouble_eq(ceil(1), s21_ceil(1));
+  ck_assert_ldouble_eq(floor(1.7), s21_floor(1.7));
+  ck_assert_int_eq(floor(-1.7), s21_floor(-1.7));
+  ck_assert_int_eq(floor(-0.7), s21_floor(-0.7));
+  ck_assert_ldouble_eq(floor(14.7), s21_floor(14.7));
+  ck_assert_ldouble_eq(floor(0.7), s21_floor(0.7));
+  ck_assert_ldouble_eq(floor(S21_INF), s21_floor(S21_INF));
+  ck_assert_ldouble_eq(floor(-S21_INF), s21_floor(-S21_INF));
+  ck_assert_ldouble_nan(s21_floor(S21_NAN));
+  ck_assert_ldouble_eq(floor(0.123456907912345), s21_floor(0.123456907912345));
 }
 END_TEST
 
@@ -140,6 +383,54 @@ START_TEST(test_tan) {
   ck_assert_ldouble_nan(s21_tan(INFINITY));
   ck_assert_ldouble_nan(s21_tan(-INFINITY));
   ck_assert_ldouble_eq_tol(s21_tan(-S21_PI / 2), tan(-S21_PI / 2), 1e-6);
+  {
+    double x = 0.4;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = -0.4;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = 0;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = 1;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = -1;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = 400000.23;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = -400000.23;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+
+  {
+    double x = 0.123456789012345678901234567890;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = S21_PI;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = 1 + 1e-6;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  {
+    double x = -1 - 1e-6;
+    ck_assert_ldouble_eq_tol(tan(x), s21_tan(x), 1e-6);
+  }
+  ck_assert_ldouble_nan(s21_tan(S21_INF));
+  ck_assert_ldouble_nan(s21_tan(S21_NAN));
+  ck_assert_ldouble_nan(s21_tan(-S21_INF));
 }
 END_TEST
 
@@ -156,6 +447,50 @@ START_TEST(test_atan) {
   ck_assert_ldouble_eq_tol(s21_atan(0.1), atan(0.1), 1e-06);
   ck_assert_ldouble_eq_tol(s21_atan(-0.1), atan(-0.1), 1e-06);
   ck_assert_ldouble_nan(s21_atan(NAN));
+  {
+    double x = 0.4;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = -0.4;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = 0;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = -0.0;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = -1;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = 100000000.0;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = -1000000000000000;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = 0.923456789012345678901234567890;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = S21_NAN;
+    ck_assert_ldouble_nan(s21_atan(x));
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
+  {
+    double x = -S21_INF;
+    ck_assert_ldouble_eq_tol(atan(x), s21_atan(x), 1e-6);
+  }
 }
 END_TEST
 
@@ -175,6 +510,95 @@ START_TEST(test_sqrt) {
   ck_assert_ldouble_nan(s21_sqrt(-15.01));
   ck_assert_ldouble_eq_tol(s21_sqrt(0.9999), sqrt(0.9999), 1e-6);
   ck_assert_ldouble_eq_tol(s21_sqrt(98765432.123), sqrt(98765432.123), 1e-6);
+
+  {
+    double x = 1;
+    ck_assert_ldouble_eq_tol(s21_sqrt(x), sqrt(x), 1e-6);
+  }
+  {
+    double x = 0.123456;
+    ck_assert_ldouble_eq_tol(s21_sqrt(x), sqrt(x), 1e-6);
+  }
+  {
+    double x = 0.0;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = -0.0;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = 987565.9874641213656;
+    ck_assert_ldouble_eq_tol(s21_sqrt(x), sqrt(x), 1e-6);
+  }
+  {
+    double x = S21_PI / 3;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = S21_PI / 6;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = S21_PI / 2;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = 2 * S21_PI / 3;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = 5 * S21_PI / 6;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = S21_PI;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = -1.234567;
+    ck_assert_ldouble_nan(s21_sqrt(x));
+  }
+  {
+    double x = 64.;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = 123456789;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = DBL_MIN;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = 4.163435e-34;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = 1e-7;
+    ck_assert_ldouble_eq_tol(sqrt(x), s21_sqrt(x), 1e-6);
+  }
+  {
+    double x = -121.;
+    ck_assert_ldouble_nan(s21_sqrt(x));
+  }
+  {
+    double x = -2.89;
+    ck_assert_ldouble_nan(s21_sqrt(x));
+  }
+  {
+    double x = S21_NAN;
+    ck_assert_ldouble_nan(s21_sqrt(x));
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_eq(sqrt(x), s21_sqrt(x));
+  }
+  {
+    double x = -S21_INF;
+    ck_assert_ldouble_nan(s21_sqrt(x));
+  }
 }
 END_TEST
 
@@ -191,6 +615,54 @@ START_TEST(test_asin) {
   ck_assert_ldouble_eq_tol(s21_asin(-sqrt(3) / 2), asin(-sqrt(3) / 2), 1e-6);
   ck_assert_ldouble_eq_tol(s21_asin(-sqrt(2) / 2), asin(-sqrt(2) / 2), 1e-6);
   ck_assert_ldouble_eq_tol(s21_asin(-1), asin(-1), 1e-6);
+  {
+    double x = 0.4;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = -0.4;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = 0.0;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = -0.0;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = -1;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = 5;
+    ck_assert_ldouble_nan(s21_asin(x));
+  }
+  {
+    double x = -5;
+    ck_assert_ldouble_nan(s21_asin(x));
+  }
+  {
+    double x = 0.123456789012345678901234567890;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = 1 + 1e-16l;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = -1 - 1e-16l;
+    ck_assert_ldouble_eq_tol(asin(x), s21_asin(x), 1e-6);
+  }
+  {
+    double x = S21_NAN;
+    ck_assert_ldouble_nan(s21_asin(x));
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_nan(s21_asin(x));
+  }
 }
 END_TEST
 
@@ -210,6 +682,42 @@ START_TEST(test_acos) {
   ck_assert_ldouble_eq_tol(s21_acos(sqrt(3) / 2), acos(sqrt(3) / 2), 1e-6);
   ck_assert_ldouble_eq_tol(s21_acos(0.5), acos(0.5), 1e-6);
   ck_assert_ldouble_eq_tol(s21_acos(-0.5), acos(-0.5), 1e-6);
+  {
+    double x = 0.999;
+    ck_assert_ldouble_eq_tol(acos(x), s21_acos(x), 1e-6);
+  }
+  {
+    double x = 1;
+    ck_assert_ldouble_eq_tol(acos(x), s21_acos(x), 1e-6);
+  }
+  {
+    double x = 3.0;
+    ck_assert_ldouble_nan(s21_acos(x));
+  }
+  {
+    double x = 0;
+    ck_assert_ldouble_eq_tol(acos(x), s21_acos(x), 1e-6);
+  }
+  {
+    double x = -0.001;
+    ck_assert_ldouble_eq_tol(acos(x), s21_acos(x), 1e-6);
+  }
+  {
+    double x = -0.9999;
+    ck_assert_ldouble_eq_tol(acos(x), s21_acos(x), 1e-6);
+  }
+  {
+    double x = -1 - 1e-16;
+    ck_assert_ldouble_eq_tol(acos(x), s21_acos(x), 1e-6);
+  }
+  {
+    double x = 1.001;
+    ck_assert_ldouble_nan(s21_acos(x));
+  }
+  {
+    double x = -1.1;
+    ck_assert_ldouble_nan(s21_acos(x));
+  }
 }
 END_TEST
 
@@ -229,6 +737,54 @@ START_TEST(test_exp) {
   // ck_assert_ldouble_infinite(s21_exp(1000000));
   ck_assert_ldouble_eq(S21_INF, s21_exp(1000000));
   ck_assert_ldouble_eq_tol(s21_exp(-750), exp(-750), 1e-6);
+  {
+    double x = 24.67;
+    ck_assert_ldouble_eq_tol(exp(x), s21_exp(x), 1e-6);
+  }
+  {
+    double x = DBL_MAX;
+    ck_assert_ldouble_eq(exp(x), s21_exp(x));
+  }
+  {
+    double x = DBL_MIN;
+    ck_assert_ldouble_eq(exp(x), s21_exp(x));
+  }
+  {
+    double x = INT_MAX;
+    ck_assert_ldouble_eq(exp(x), s21_exp(x));
+  }
+  {
+    double x = 7.345e-29;
+    ck_assert_ldouble_eq_tol(exp(x), s21_exp(x), 1e-6);
+  }
+  {
+    double x = -0.767;
+    ck_assert_ldouble_eq_tol(exp(x), s21_exp(x), 1e-6);
+  }
+  {
+    double x = -13.567;
+    ck_assert_ldouble_eq_tol(exp(x), s21_exp(x), 1e-6);
+  }
+  {
+    double x = 0.0;
+    ck_assert_ldouble_eq_tol(exp(x), s21_exp(x), 1e-6);
+  }
+  {
+    double x = S21_NAN;
+    ck_assert_ldouble_nan(s21_exp(x));
+  }
+  {
+    double x = -0.0;
+    ck_assert_ldouble_eq_tol(exp(x), s21_exp(x), 1e-6);
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_eq(exp(x), s21_exp(x));
+  }
+  {
+    double x = -S21_INF;
+    ck_assert_ldouble_eq(exp(x), s21_exp(x));
+  }
 }
 END_TEST
 
@@ -254,6 +810,50 @@ START_TEST(test_log) {
                            1e-6);
   ck_assert_ldouble_eq_tol(s21_log(1.1e-16), log(1.1e-16), 1e-6);
   ck_assert_ldouble_eq_tol(s21_log(1.1e-45), log(1.1e-45), 1e-6);
+  {
+    double x = 2.523;
+    ck_assert_ldouble_eq_tol(log(x), s21_log(x), 1e-6);
+  }
+  {
+    double x = DBL_MAX;
+    ck_assert_ldouble_eq_tol(log(x), s21_log(x), 1e-6);
+  }
+  {
+    double x = DBL_MIN;
+    ck_assert_ldouble_eq_tol(log(x), s21_log(x), 1e-6);
+  }
+  {
+    double x = 4.3234323e-43;
+    ck_assert_ldouble_eq_tol(log(x), s21_log(x), 1e-6);
+  }
+  {
+    double x = -3432.12;
+    ck_assert_ldouble_nan(s21_log(x));
+  }
+  {
+    double x = 0;
+    ck_assert_ldouble_infinite(s21_log(x));
+  }
+  {
+    double x = 1;
+    ck_assert_ldouble_eq_tol(log(x), s21_log(x), 1e-6);
+  }
+  {
+    double x = S21_NAN;
+    ck_assert_ldouble_nan(s21_log(x));
+  }
+  {
+    double x = -S21_NAN;
+    ck_assert_ldouble_nan(s21_log(x));
+  }
+  {
+    double x = S21_INF;
+    ck_assert_ldouble_infinite(s21_log(x));
+  }
+  {
+    double x = -S21_INF;
+    ck_assert_ldouble_nan(s21_log(x));
+  }
 }
 END_TEST
 
@@ -329,6 +929,185 @@ START_TEST(test_pow) {
     }
   }
   ck_assert_ldouble_eq_tol(res, res1, 1e-6);
+
+  {
+    double num = 134.5;
+    double p = 1.4;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = 134.5;
+    double p = 20.5e-34;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = 563.23;
+    double p = -42.;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -10.1;
+    double p = -3.;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -10.1;
+    double p = 2.;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -10.1;
+    double p = -1.5;
+    ck_assert_ldouble_nan(s21_pow(num, p));
+  }
+  {
+    double num = 10.1;
+    double p = 0.123;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -27.45;
+    double p = 1.0 / 3.0;
+    ck_assert_ldouble_nan(s21_pow(num, p));
+  }
+  {
+    double num = 12.34;
+    double p = 1;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = 0;
+    double p = -12;
+    ck_assert_ldouble_infinite(s21_pow(num, p));
+    ck_assert_ldouble_infinite(pow(num, p));
+  }
+  {
+    double num = 0;
+    double p = 12;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -1;
+    ck_assert_ldouble_eq_tol(pow(num, S21_INF), s21_pow(num, S21_INF), 1e-6);
+  }
+  {
+    double num = 0.123;
+    double p = -S21_INF;
+    ck_assert_ldouble_infinite(s21_pow(num, p));
+    ck_assert_ldouble_infinite(pow(num, p));
+  }
+  {
+    double num = 0.123;
+    double p = S21_INF;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = 13;
+    double p = -S21_INF;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -0.0;
+    double p = 12;
+    ck_assert_ldouble_eq(pow(num, p), s21_pow(num, p));
+  }
+  {
+    double num = 13;
+    double p = S21_INF;
+    ck_assert_ldouble_infinite(s21_pow(num, p));
+    ck_assert_ldouble_infinite(pow(num, p));
+  }
+  {
+    double num = S21_INF;
+    double p = -12;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -S21_INF;
+    double p = -13;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = -S21_INF;
+    double p = 13;
+    ck_assert_ldouble_infinite(s21_pow(num, p));
+    ck_assert_ldouble_infinite(pow(num, p));
+  }
+  {
+    double num = -S21_INF;
+    double p = -12;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = S21_INF;
+    double p = 12;
+    ck_assert_ldouble_infinite(s21_pow(num, p));
+    ck_assert_ldouble_infinite(pow(num, p));
+  }
+  {
+    double num = DBL_MAX;
+    double p = -10;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+  {
+    double num = DBL_MIN;
+    double p = 10;
+    ck_assert_ldouble_eq_tol(pow(num, p), s21_pow(num, p), 1e-6);
+  }
+}
+END_TEST
+
+START_TEST(test_fmod) {
+  {
+    double x = 12.0;
+    double y = 4.0;
+    ck_assert_ldouble_eq_tol(s21_fmod(x, y), fmod(x, y), 1e-6);
+  }
+  {
+    double x = 0.0;
+    double y = 5.5;
+    ck_assert_ldouble_eq_tol(s21_fmod(x, y), fmod(x, y), 1e-6);
+  }
+  {
+    double x = S21_INF;
+    double y = 5.5;
+    ck_assert_ldouble_nan(s21_fmod(x, y));
+  }
+  {
+    double x = -S21_INF;
+    double y = 5.5;
+    ck_assert_ldouble_nan(s21_fmod(x, y));
+  }
+  {
+    double x = 5.8;
+    double y = 0.0;
+    ck_assert_ldouble_nan(s21_fmod(x, y));
+  }
+  {
+    double x = 5.8;
+    double y = -0.0;
+    ck_assert_ldouble_nan(s21_fmod(x, y));
+  }
+  {
+    double x = 5.8;
+    double y = S21_INF;
+    ck_assert_ldouble_eq_tol(s21_fmod(x, y), fmod(x, y), 1e-6);
+  }
+  {
+    double x = 5.8;
+    double y = -S21_INF;
+    ck_assert_ldouble_eq_tol(s21_fmod(x, y), fmod(x, y), 1e-6);
+  }
+  {
+    double x = S21_NAN;
+    double y = 12.6;
+    ck_assert_ldouble_nan(s21_fmod(x, y));
+  }
+  {
+    double x = 5.5;
+    double y = S21_NAN;
+    ck_assert_ldouble_nan(s21_fmod(x, y));
+  }
 }
 END_TEST
 
@@ -353,6 +1132,7 @@ Suite *suite_s21_math(void) {
   tcase_add_test(tc_tests, test_exp);
   tcase_add_test(tc_tests, test_log);
   tcase_add_test(tc_tests, test_pow);
+  tcase_add_test(tc_tests, test_fmod);
 
   suite_add_tcase(s, tc_tests);
 
